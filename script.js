@@ -19,11 +19,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
         previewContainer.innerHTML = '';
         previewContainer.appendChild(video);
 
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        const imageDataUrl = canvas.toDataURL('image/jpeg');
-        savePhotoLocally(imageDataUrl);
+        video.addEventListener('loadeddata', function() {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+          const imageDataUrl = canvas.toDataURL('image/jpeg');
+          savePhotoLocally(imageDataUrl);
+          video.srcObject = null; // Stop the video stream
+        });
       })
       .catch(function(err) {
         console.error('Error accessing camera:', err);
